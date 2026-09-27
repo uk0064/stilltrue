@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- A Claude Code plugin marketplace at the repository root, so the plugin installs once
+  for every project: `claude plugin marketplace add uk0064/stilltrue`, then
+  `claude plugin install stilltrue@stilltrue`.
 - `--summary` and `--report-file FILE`: what a run examined and what it did not. Every
   claim is accounted for — ignored, true, broken, skipped or ambiguous, with a stable
   reason code — and the run is `complete`, `incomplete` or `no-input`, so a quiet run

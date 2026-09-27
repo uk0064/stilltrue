@@ -33,7 +33,16 @@ see [the quickstart](quickstart.md). `cargo install` installs the two together.
 ### Claude Code
 
 The plugin in `integrations/claude-code/` registers the hooks and a skill describing
-how to repair a finding. For a local checkout:
+how to repair a finding. This repository is also a plugin marketplace, so it installs
+once for every project:
+
+```bash
+claude plugin marketplace add uk0064/stilltrue
+claude plugin install stilltrue@stilltrue
+```
+
+Inside a session, `/plugin marketplace add uk0064/stilltrue` does the same. For a local
+checkout, without installing anything:
 
 ```bash
 claude --plugin-dir integrations/claude-code
