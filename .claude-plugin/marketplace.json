@@ -1,0 +1,17 @@
+{
+  "name": "stilltrue",
+  "owner": {
+    "name": "uk0064",
+    "url": "https://github.com/uk0064"
+  },
+  "metadata": {
+    "description": "stilltrue for Claude Code: keeps an agent's instructions honest about the repository they describe."
+  },
+  "plugins": [
+    {
+      "name": "stilltrue",
+      "source": "./integrations/claude-code",
+      "description": "Checks, at session start and at each completion, whether the repository's instructions and docs still describe it. Advisory by default; needs stilltrue and stilltrue-hook on PATH."
+    }
+  ]
+}
