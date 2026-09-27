@@ -13,11 +13,12 @@ adapters. It ends with how precision is verified. The vocabulary — claim, true
 rot, lie, needle, scope, tier — is defined in [CONTEXT.md](../CONTEXT.md) and used here
 exactly as defined there.
 
-Each design decision is recorded as an ADR in the section it governs, with its context,
-the decision and its consequences. Decisions keep their original numbers, so the ADR
-citations in the code (ADR-0010 and so on) still find them; the index below lists them
-in number order. A new decision takes the next free number and goes in the section it
-belongs to, with a row in the index.
+The decisions made before this document existed are recorded as ADRs in the sections
+they govern, with their context, the decision and its consequences. They keep their
+original numbers, so the ADR citations in the code (ADR-0010 and so on) still find
+them; the index below lists them in number order. Later decisions are not numbered:
+each is written into the section it changes, with its reasoning and the evidence that
+prompted it, and the code cites the section.
 
 ## Decision index
 
@@ -196,6 +197,7 @@ include:  README*  docs/**  CLAUDE.md  AGENTS.md  .cursor/rules/**  **/SKILL.md
           and README*, CLAUDE.md and AGENTS.md at any depth
 exclude:  CHANGELOG*  CHANGES*  HISTORY*  NEWS*  RELEASE-NOTES*  RELEASE_NOTES*
           RELEASES*, at any depth and in any case
+          and any file whose name begins with a date, at any depth
 ```
 
 Nested READMEs are included because a monorepo documents a package's commands in the
@@ -217,6 +219,27 @@ onto the repository root; without that, an absolute path or one typed from a
 subdirectory matches nothing and the run passes having read nothing. A path outside the
 repository is dropped with a diagnostic, and dropping every path lints nothing rather
 than everything.
+
+### Dated documents are records
+
+A document whose file name begins with a date — four digits, a real month and a real
+day, joined by hyphens, then the end of the name or a separator — is excluded by
+default, at any depth. Coding agents write their plans and design specs this way, one
+per task, and a plan is a record of what was about to be true: it names the file it
+will create, and a refactor two weeks later deletes that file. Across fourteen
+repositories built mostly by Claude Code, 135 of the 216 findings a default run reported
+sat in dated plans and specs, against 3 in all of their CLAUDE.md files. Nobody should
+edit a finished plan to make it true again, so a finding there has nothing to act on,
+and through the agent adapters it would reach every session as context. This is the
+reasoning of [ADR-0012](#adr-0012--historical-records-are-not-documents) applied to a
+genre that did not exist when it was written, and recognised the same way: from the
+file name, the only signal available without reading prose.
+
+Unlike a changelog, a dated document can be read again: `lint_dated = true` in the
+configuration file lints them. The summary and the run report count the documents
+skipped this way, so a repository whose documents are mostly dated cannot pass for a
+clean one. A living document that happens to be named for a date is skipped quietly,
+which is the direction this tool errs in.
 
 ### ADR-0012 · Historical records are not documents
 
@@ -449,6 +472,25 @@ searched with `git log --full-history` under a `:(literal)` pathspec, so a `*` i
 claim is never read as a wildcard. Its candidates are files elsewhere with the same
 name, which is the shape a moved file takes. A broken bare ecosystem filename is
 ambiguous instead ([ADR-0011](#adr-0011--a-bare-ecosystem-filename-is-ambiguous)).
+
+A path that leaves the repository under both readings is skipped as
+`outside-repository`, exactly as a link is: it is a claim about another checkout, of
+the kind an agent working across sibling repositories writes. When only one reading
+stays inside, that reading is the one searched. Git refuses a pathspec outside the
+repository, and a refused search makes the whole run incomplete
+([ADR-0020](#adr-0020--a-failed-history-search-is-not-an-answer)); on the same fourteen
+repositories, four runs were incomplete for this reason alone.
+
+A leading `/` is read as the repository root only when the rest of the path could be
+under it: everything before the last segment must exist at the root, and a single
+segment after the slash is never judged. Instruction files are full of text shaped like
+a root path that is not one — slash commands such as /review, HTTP routes such as
+/health or /api/v1/users, and absolute paths on the author's machine. Across those
+repositories 339 findings were written this way; this rule leaves 11, all Tier B, and
+removes no rot. What it gives up is a root path whose directory was deleted along with
+the file, which then stays silent. A path beginning with the repository's own absolute
+location is read relative to the root, because agents write those. Anything else is
+ambiguous, as `not-a-root-path`.
 
 ### Links and anchors
 
@@ -949,6 +991,7 @@ key is optional:
 include = ["README*", "docs/**"]   # replaces the default document set
 exclude = ["docs/legacy/**"]       # extends the default excludes
 strict  = false                    # also report Tier B, as --strict does
+lint_dated = false                 # also lint documents named for a date
 
 [ignore]
 symbols = ["LegacyThing"]          # matched on the normalised name

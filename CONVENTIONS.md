@@ -8,11 +8,12 @@ and the vocabulary is in [CONTEXT.md](CONTEXT.md). Read both before proposing a 
 
 - The design document is the source of truth. To change a decision, change the document
   first, in the same change as the code, and say so. Never diverge silently in code.
-- A new decision takes the next free ADR number and goes in the section of the design
-  document it belongs to, with its context, the decision and its consequences, plus a
-  row in the index. Cite it by number from the code, as the comments already do.
+- A new decision goes in the section of the design document it changes, with its
+  reasoning and the evidence that prompted it. It gets no number: the numbered ADRs there
+  are the earlier decisions, kept because the code cites them. Code cites a new decision
+  by its section.
 - A new classification rule — anything that makes a broken claim ambiguous — is always
-  a decision, and always gets an ADR.
+  a decision, and is always written up before the code.
 - There is no model anywhere in the pipeline. If a check needs one, it does not belong
   here.
 
