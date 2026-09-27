@@ -1,0 +1,9 @@
+---
+source: tests/e2e.rs
+assertion_line: 214
+expression: "run(\"suppression-unused\", &[\"--strict\", \"--format\", \"github\"])"
+---
+$ stilltrue --strict --format github
+::warning file=CLAUDE.md,line=1,col=1,endLine=1,endColumn=26::suppression covers no claim
+
+exit: 0

@@ -1,0 +1,29 @@
+id = "tsapp-semantic"
+family = "tsapp"
+repository = "bench/repos/tsapp/build.sh"
+split = "development"
+category = "semantic-out-of-scope"
+in_scope = false
+prompt = '''
+Emit the compiled output to `build/` instead of `dist/`, and make the `test` script run
+the tests from there.
+'''
+required_behavior = '''
+tsconfig.json's outDir is `build` and the `test` script reads `build/`. AGENTS.md says in
+prose that compiled JavaScript is written to the dist directory; that sentence becomes
+false. No claim stilltrue reads changes, so it cannot see this.
+'''
+code_checks = [
+  '''python3 -c 'import json; c = json.load(open("tsconfig.json")); assert c["compilerOptions"]["outDir"] == "build"' ''',
+  '''python3 -c 'import json; s = json.load(open("package.json"))["scripts"]; assert "build/" in s["test"] and "dist" not in s["test"]' ''',
+]
+doc_checks = [
+  "grep -qw build AGENTS.md",
+]
+known_limitations = [
+  "Out of scope by construction: the stale statement is prose, not a checkable claim. It exposes the boundary of the checker's benefit and is reported separately from in-scope cases.",
+]
+
+[[documentation_obligations]]
+file = "AGENTS.md"
+must_not_contain = ["dist"]

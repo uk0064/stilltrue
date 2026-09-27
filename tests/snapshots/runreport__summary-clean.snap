@@ -1,0 +1,11 @@
+---
+source: tests/runreport.rs
+expression: summary
+---
+stilltrue: summary (complete)
+  documents   1 matched · 1 read · 0 unreadable
+  claims      1 extracted · 0 ignored · 1 true · 0 broken · 0 skipped · 0 ambiguous
+  gate        0 rot · 0 lie reported · 0 lie not reported · 0 abstained · 0 history failed
+  baseline    0 suppressed
+  history     complete · 0 searches · 4 git processes
+stilltrue: No reportable rot. Checked 1 document(s).

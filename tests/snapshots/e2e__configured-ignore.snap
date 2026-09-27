@@ -1,0 +1,14 @@
+---
+source: tests/e2e.rs
+assertion_line: 227
+expression: "run(\"configured-ignore\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+CLAUDE.md:5:18  rot  symbol `render_report()` is not defined anywhere
+                     likely broke in <sha> "rename the entry point, the attribute, the reporter and drop the variables" · <when>
+CLAUDE.md:7:24  rot  env var `ORCHARD_SECRET` is not read anywhere in the repository
+                     likely broke in <sha> "rename the entry point, the attribute, the reporter and drop the variables" · <when>
+
+stilltrue: 2 rot, 0 lie
+
+exit: 1

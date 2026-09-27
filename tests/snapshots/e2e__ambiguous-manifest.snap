@@ -1,0 +1,11 @@
+---
+source: tests/e2e.rs
+expression: "run(\"ambiguous-manifest\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+README.md:1:43  rot  path `config/requirements.txt` does not exist
+                     likely broke in <sha> "move to pyproject" · <when>
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

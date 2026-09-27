@@ -1,0 +1,10 @@
+---
+source: tests/e2e.rs
+expression: "run(\"path-lie\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+CLAUDE.md:1:6  lie  path `docs/never-existed.md` does not exist
+
+stilltrue: 0 rot, 1 lie
+
+exit: 0

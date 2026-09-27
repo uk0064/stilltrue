@@ -1,0 +1,12 @@
+---
+source: tests/runreport.rs
+expression: summary
+---
+stilltrue: summary (incomplete)
+  documents   1 matched · 1 read · 0 unreadable
+  claims      1 extracted · 0 ignored · 0 true · 1 broken · 0 skipped · 0 ambiguous
+  gate        0 rot · 0 lie reported · 1 lie not reported · 0 abstained · 0 history failed
+  baseline    0 suppressed
+  history     shallow · 1 searches · 4 git processes
+  diagnostic  history-unavailable — history unavailable (shallow); nothing can be reported as rot
+stilltrue: Incomplete (history-unavailable). A quiet result from this run is not a clean one.

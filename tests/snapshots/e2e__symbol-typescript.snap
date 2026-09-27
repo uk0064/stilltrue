@@ -1,0 +1,12 @@
+---
+source: tests/e2e.rs
+expression: "run(\"symbol-typescript\", &[])"
+---
+$ stilltrue 
+CLAUDE.md:1:21  rot  symbol `foldEvents()` is not defined anywhere
+                     likely broke in <sha> "rename foldEvents to collapseEvents" · <when>
+                     did you mean: collapseEvents, events?
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

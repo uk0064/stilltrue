@@ -1,0 +1,9 @@
+{
+  "session_id": "replay-claude",
+  "transcript_path": "/tmp/transcript.jsonl",
+  "cwd": "REPLACED",
+  "permission_mode": "default",
+  "effort": { "level": "medium" },
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "Split the demo target."
+}

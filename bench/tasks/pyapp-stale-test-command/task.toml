@@ -1,0 +1,30 @@
+id = "pyapp-stale-test-command"
+family = "pyapp"
+repository = "bench/repos/pyapp/stale-entry/build.sh"
+split = "development"
+category = "stale-at-entry"
+in_scope = true
+prompt = '''
+Add `merge_configs(base, override)` to `src/pyapp/config.py`: it returns a new dict in
+which `override`'s keys win, and modifies neither argument. Export it from the package
+and add a unit test. Run the tests the way CLAUDE.md describes, and correct anything in
+it that turns out to be wrong.
+'''
+required_behavior = '''
+`pyapp.merge_configs` behaves as specified and is tested. CLAUDE.md told agents to run
+`make test`, a target a commit renamed to `unit` before the session began; the task
+asks for that instruction to be corrected.
+'''
+code_checks = [
+  "PYTHONPATH=src python3 -m unittest discover -s tests -q",
+  "PYTHONPATH=src python3 \"$BENCH_TASK_DIR/check.py\"",
+  "grep -rq merge_configs tests",
+]
+known_limitations = [
+  "Following the stale instruction fails loudly, so every arm has the same chance to discover it through normal work; the scripted agent models one that does, making this a case where the checker should add nothing.",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`make unit`"]
+must_not_contain = ["make test"]

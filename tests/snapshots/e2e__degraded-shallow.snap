@@ -1,0 +1,10 @@
+---
+source: tests/e2e.rs
+expression: "run(\"degraded-shallow\", &[])"
+---
+$ stilltrue 
+stilltrue: history unavailable (shallow clone) — nothing can be reported as rot.
+stilltrue: fix: check out with `fetch-depth: 0`, or pass --require-history to fail instead.
+stilltrue: no findings
+
+exit: 0

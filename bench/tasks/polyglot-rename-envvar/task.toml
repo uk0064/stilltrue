@@ -1,0 +1,27 @@
+id = "polyglot-rename-envvar"
+family = "polyglot"
+repository = "bench/repos/polyglot/build.sh"
+split = "development"
+category = "code-breaks-untouched-doc"
+in_scope = true
+prompt = '''
+Rename the environment variable `EVENTS_DB_URL` to `EVENTS_DATABASE_URL` in the
+ingester and its tests. The old name should no longer be read.
+'''
+required_behavior = '''
+`ingest.database_url()` reads `EVENTS_DATABASE_URL`, nothing reads `EVENTS_DB_URL`, and
+the tests pass. CLAUDE.md tells people to set the old name and must be updated.
+'''
+code_checks = [
+  "python3 -m unittest -q test_ingest",
+  "grep -q EVENTS_DATABASE_URL ingest.py",
+  "! grep -rq --include='*.py' EVENTS_DB_URL .",
+]
+known_limitations = [
+  "Environment variables stay checkable in a mixed-language repository, unlike symbols (compare polyglot-rename-function).",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`EVENTS_DATABASE_URL`"]
+must_not_contain = ["EVENTS_DB_URL"]

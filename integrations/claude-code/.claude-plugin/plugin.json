@@ -1,0 +1,11 @@
+{
+  "name": "stilltrue",
+  "version": "0.1.0",
+  "description": "Checks, at session start and at each completion, whether the repository's instructions and docs still describe it. Advisory by default; needs stilltrue and stilltrue-hook on PATH.",
+  "author": {
+    "name": "uk0064",
+    "url": "https://github.com/uk0064"
+  },
+  "homepage": "https://github.com/uk0064/stilltrue",
+  "license": "MIT"
+}

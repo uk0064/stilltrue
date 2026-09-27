@@ -1,0 +1,23 @@
+# stilltrue as a pre-commit hook (https://pre-commit.com). Both examine the whole
+# repository on every run: a code change is what breaks an untouched document, so
+# neither takes a file list, and both run whether or not a document was staged.
+#
+# pre-commit stashes unstaged changes before running hooks, so these see the staged
+# snapshot of tracked files — a fix you have not `git add`-ed is not seen. A direct
+# `stilltrue` run reads the working tree. tests/product/precommit.sh pins both.
+- id: stilltrue
+  name: stilltrue
+  description: Check that the claims your documents make still describe the repository.
+  entry: stilltrue
+  language: rust
+  pass_filenames: false
+  always_run: true
+  require_serial: true
+- id: stilltrue-system
+  name: stilltrue (installed binary)
+  description: The same check, run with a stilltrue already on PATH.
+  entry: stilltrue
+  language: system
+  pass_filenames: false
+  always_run: true
+  require_serial: true

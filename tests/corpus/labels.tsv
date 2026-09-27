@@ -1,0 +1,7 @@
+# repository	fingerprint	label	note — a finding's review. The fingerprint is the one --report-file and SARIF carry, so a label follows its finding through a reflow and is lost when the claim changes. Labels are true-positive or false-positive; anything unlabelled is reported as unreviewed, never counted as either.
+codex	3d58df10c0721464	true-positive	AGENTS.md names mcp_connection_manager.rs, which "Split MCP connection modules" removed
+codex	c79edbd5b0d05ccb	true-positive	the memories README points at codex-rs/core/src/memories/, which the memories split moved
+flask	016b9b6f8f1e9e76	false-positive	flask.commands is an entry-point group name, spelled exactly like an attribute; ADR-0017 has no marker to tell them apart
+fzf	f99d0fdee4185f6e	true-positive	#upgrading-fzf: the heading was removed from README.md
+fzf	fd79d97da0983d3f	true-positive	#examples: the Vim examples section was removed
+fzf	876b3c88b44401c0	true-positive	#vim-plugin: the heading moved to the Vim docs

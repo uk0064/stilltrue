@@ -1,0 +1,12 @@
+---
+source: tests/runreport.rs
+expression: summary
+---
+stilltrue: summary (no-input)
+  documents   0 matched · 0 read · 0 unreadable
+  claims      0 extracted · 0 ignored · 0 true · 0 broken · 0 skipped · 0 ambiguous
+  gate        0 rot · 0 lie reported · 0 lie not reported · 0 abstained · 0 history failed
+  baseline    0 suppressed
+  history     complete · 0 searches · 4 git processes
+  diagnostic  no-documents — no documents matched; nothing was examined
+stilltrue: Nothing was examined: no documents matched.

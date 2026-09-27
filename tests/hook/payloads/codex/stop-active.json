@@ -1,0 +1,11 @@
+{
+  "session_id": "replay-codex",
+  "transcript_path": null,
+  "cwd": "REPLACED",
+  "hook_event_name": "Stop",
+  "model": "gpt-5",
+  "permission_mode": "default",
+  "turn_id": "turn-1",
+  "stop_hook_active": true,
+  "last_assistant_message": null
+}

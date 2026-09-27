@@ -1,0 +1,10 @@
+---
+source: tests/e2e.rs
+expression: "stilltrue(&repo, &[\"--strict\", \"/etc\"])"
+---
+$ stilltrue --strict /etc
+stilltrue: warning: `/etc` is outside the repository; ignoring it
+stilltrue: warning: no documents matched; nothing was examined. Check the paths you passed, or `include` in stilltrue.toml.
+stilltrue: no findings
+
+exit: 0

@@ -1,0 +1,11 @@
+---
+source: tests/e2e.rs
+expression: "run(\"historical-record\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+docs/guide.md:1:22  rot  path `src/engine.py` does not exist
+                         likely broke in <sha> "rename engine to core" · <when>
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

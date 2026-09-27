@@ -1,0 +1,11 @@
+---
+source: tests/e2e.rs
+expression: "run(\"placeholder-vs-real-path\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+CLAUDE.md:3:21  rot  path `packages/core/index.ts` does not exist
+                     likely broke in <sha> "move core out of packages" · <when>
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

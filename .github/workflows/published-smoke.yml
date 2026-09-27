@@ -1,0 +1,77 @@
+name: published-smoke
+
+# A published release, met the way a user meets it: the archive downloaded and
+# checksummed on every advertised platform, and the Action run from an independent
+# consuming repository. Run by hand with the version to check, or when a release is
+# published. A platform that fails is a failed job, never a skipped one.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The published version to verify, without the leading v.
+        required: true
+  release:
+    types: [published]
+
+# Read-only unless a job asks for more; nothing here writes to the repository.
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-15-intel, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify the published archive
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version || github.event.release.tag_name }}
+        run: tests/release/verify-published.sh "${VERSION#v}"
+
+  consumer:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-15-intel, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: .stilltrue-action
+      - name: Resolve the version
+        id: version
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version || github.event.release.tag_name }}
+        # A release tag is `v0.1.0`; the Action's input is the version without the v.
+        run: echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"
+      - name: Build an independent consuming repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The workspace becomes a repository of its own that has never heard of
+          # stilltrue, with the README's demonstration in its history. The Action's
+          # checkout is excluded, so only the consumer's documents are read.
+          bash .stilltrue-action/tests/fixtures/readme-demo/build.sh "$RUNNER_TEMP/consumer"
+          cp -R "$RUNNER_TEMP/consumer/." "$GITHUB_WORKSPACE/"
+          echo ".stilltrue-action/" >> .git/info/exclude
+      - name: Run the Action as a consumer would
+        id: stilltrue
+        uses: ./.stilltrue-action
+        with:
+          version: ${{ steps.version.outputs.version }}
+          fail-on: none
+      - name: Check what the Action reported
+        shell: bash
+        env:
+          REPORT: ${{ steps.stilltrue.outputs.report-file }}
+        run: |
+          set -euo pipefail
+          test -f "$REPORT" || { echo "no run report at '$REPORT'"; exit 1; }
+          grep -q '"status": "complete"' "$REPORT" || { echo "the scan was not complete"; cat "$REPORT"; exit 1; }
+          grep -q 'command `make demo` has no target in Makefile' "$REPORT" \
+            || { echo "the demonstration's finding is missing"; cat "$REPORT"; exit 1; }

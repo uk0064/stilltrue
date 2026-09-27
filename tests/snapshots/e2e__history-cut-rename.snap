@@ -1,0 +1,8 @@
+---
+source: tests/e2e.rs
+expression: "run(\"history-cut-rename\", &[])"
+---
+$ stilltrue 
+stilltrue: no findings
+
+exit: 0

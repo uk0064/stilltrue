@@ -1,0 +1,30 @@
+id = "pyapp-rename-make-target"
+family = "pyapp"
+repository = "bench/repos/pyapp/build.sh"
+split = "development"
+category = "code-breaks-untouched-doc"
+in_scope = true
+prompt = '''
+Rename the Makefile target `lint` to `check`. It should do exactly what `lint` does
+today.
+'''
+required_behavior = '''
+The Makefile has a `check` target that byte-compiles src/ and no `lint` target; the
+unit tests still pass. CLAUDE.md, which nobody asked to edit, still names the old
+target and must be updated to `make check`.
+'''
+code_checks = [
+  "grep -q '^check:' Makefile",
+  "! grep -q '^lint:' Makefile",
+  "grep -A1 '^check:' Makefile | grep -q compileall",
+  "PYTHONPATH=src python3 -m unittest discover -s tests -q",
+]
+known_limitations = [
+  "The prompt does not mention documentation: the obligation is the repository's standing expectation that CLAUDE.md stays accurate.",
+  "Restoring a `lint` alias would also make the document true, but the code checks require the old target to be gone.",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`make check`"]
+must_not_contain = ["make lint"]

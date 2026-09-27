@@ -1,0 +1,4 @@
+# Versions whose published archives passed tests/release/verify-published.sh on every
+# advertised platform, one per line, without the leading v. Setup examples may pin only
+# a version listed here; until one is, they show the vX.Y.Z placeholder rather than an
+# unpublished version or a mutable branch. tests/docs.rs holds the documents to this.

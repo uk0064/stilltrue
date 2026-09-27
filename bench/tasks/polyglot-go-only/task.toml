@@ -1,0 +1,25 @@
+id = "polyglot-go-only"
+family = "polyglot"
+repository = "bench/repos/polyglot/build.sh"
+split = "development"
+category = "clean-control"
+in_scope = true
+prompt = '''
+Add a `/healthz` endpoint to the Go server, registered in `cmd/server/routes.go`, that
+responds with `ok`.
+'''
+required_behavior = '''
+routes.go registers `/healthz` answering `ok`. No document describes the endpoint list,
+so every document stays accurate and nothing should be flagged.
+'''
+code_checks = [
+  "grep -q '\"/healthz\"' cmd/server/routes.go",
+  "grep -q 'ok' cmd/server/routes.go",
+]
+known_limitations = [
+  "The check greps the Go source rather than compiling it, so no Go toolchain is needed.",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`EVENTS_DB_URL`", "`fold_events()`", "`cmd/server/main.go`"]

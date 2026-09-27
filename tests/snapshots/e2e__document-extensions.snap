@@ -1,0 +1,16 @@
+---
+source: tests/e2e.rs
+assertion_line: 214
+expression: "run(\"document-extensions\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+docs/guide.md:1:6  rot  command `make demo` has no target in Makefile
+                        likely broke in <sha> "drop the demo target" · <when>
+                        did you mean: make seed?
+docs/guide.rst:4:7  rot  command `make demo` has no target in Makefile
+                         likely broke in <sha> "drop the demo target" · <when>
+                         did you mean: make seed?
+
+stilltrue: 2 rot, 0 lie
+
+exit: 1

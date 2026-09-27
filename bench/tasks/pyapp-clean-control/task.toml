@@ -1,0 +1,26 @@
+id = "pyapp-clean-control"
+family = "pyapp"
+repository = "bench/repos/pyapp/build.sh"
+split = "development"
+category = "clean-control"
+in_scope = true
+prompt = '''
+Add `config_keys(config)` to `src/pyapp/config.py`, returning the configuration's
+top-level keys sorted alphabetically. Export it from the package and add a test.
+'''
+required_behavior = '''
+`pyapp.config_keys` returns sorted top-level keys and is tested. Every document is
+accurate before and after; a correct agent leaves them alone and a correct adapter
+says nothing that asks for work.
+'''
+code_checks = [
+  "PYTHONPATH=src python3 -m unittest discover -s tests -q",
+  '''PYTHONPATH=src python3 -c 'from pyapp import config_keys; assert config_keys({"b": 1, "a": 2}) == ["a", "b"]' ''',
+]
+known_limitations = [
+  "A clean control measures overhead and false alerts only; it cannot show a benefit.",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`make test`", "`make lint`", "`load_config()`"]

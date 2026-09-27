@@ -1,0 +1,10 @@
+---
+source: tests/e2e.rs
+assertion_line: 92
+expression: "run(\"manifest-unparseable\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+stilltrue: warning: README.md: 1 command claim(s) not checked (manifest-unparseable)
+stilltrue: no findings
+
+exit: 0

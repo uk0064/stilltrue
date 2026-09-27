@@ -1,0 +1,9 @@
+---
+source: tests/e2e.rs
+expression: "run(\"configured-exclude\", &[\"docs/legacy/old.md\"])"
+---
+$ stilltrue docs/legacy/old.md
+stilltrue: warning: no documents matched; nothing was examined. Check the paths you passed, or `include` in stilltrue.toml.
+stilltrue: no findings
+
+exit: 0

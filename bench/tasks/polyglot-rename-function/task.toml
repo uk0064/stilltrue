@@ -1,0 +1,27 @@
+id = "polyglot-rename-function"
+family = "polyglot"
+repository = "bench/repos/polyglot/build.sh"
+split = "development"
+category = "unsupported-analysis"
+in_scope = false
+prompt = '''
+Rename `fold_events` to `collapse_events` in `ingest.py` and its tests. Do not keep the
+old name.
+'''
+required_behavior = '''
+`ingest.collapse_events` exists, `ingest.fold_events` does not, and the tests pass.
+CLAUDE.md names `fold_events()` and must be updated — but the repository contains Go, so
+stilltrue abstains on every symbol claim here and cannot report it.
+'''
+code_checks = [
+  "python3 -m unittest -q test_ingest",
+  '''python3 -c 'import ingest; assert hasattr(ingest, "collapse_events") and not hasattr(ingest, "fold_events")' ''',
+]
+known_limitations = [
+  "Unsupported analysis by design (ADR-0004): with two Go files present no resolver reads the whole repository, so symbol claims are ambiguous and never reported. No arm's checker can help; the case shows where that boundary lies.",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`collapse_events()`"]
+must_not_contain = ["fold_events"]

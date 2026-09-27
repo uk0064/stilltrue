@@ -1,0 +1,12 @@
+---
+source: tests/e2e.rs
+expression: "run(\"symbol-rot\", &[])"
+---
+$ stilltrue 
+CLAUDE.md:1:21  rot  symbol `fold_events()` is not defined anywhere
+                     likely broke in <sha> "rename fold_events to collapse_events" · <when>
+                     did you mean: collapse_events, events, other?
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

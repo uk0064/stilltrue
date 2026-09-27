@@ -1,0 +1,12 @@
+---
+source: tests/e2e.rs
+expression: "run(\"version-edition\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+README.md:1:38  rot  Rust 1.70 contradicts `rust-toolchain.toml`, which pins 1.98.0
+                     likely broke in <sha> "move to 1.98" · <when>
+                     did you mean: Rust 1.98.0?
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

@@ -1,0 +1,13 @@
+---
+source: tests/runreport.rs
+expression: summary
+---
+stilltrue: summary (incomplete)
+  documents   1 matched · 1 read · 0 unreadable
+  claims      1 extracted · 0 ignored · 0 true · 0 broken · 1 skipped · 0 ambiguous
+  gate        0 rot · 0 lie reported · 0 lie not reported · 0 abstained · 0 history failed
+  baseline    0 suppressed
+  history     complete · 0 searches · 4 git processes
+  skipped     command/manifest-unparseable 1
+  diagnostic  README.md: manifest-unparseable — 1 command claim(s) in this document were not checked
+stilltrue: Incomplete (manifest-unparseable). A quiet result from this run is not a clean one.

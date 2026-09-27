@@ -1,0 +1,9 @@
+{
+  "session_id": "recorded-session",
+  "transcript_path": "/tmp/transcript.jsonl",
+  "cwd": "REPLACED",
+  "prompt_id": "recorded-prompt",
+  "permission_mode": "default",
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "If your context contains a stilltrue finding, reply with only the command it names, in backticks. Otherwise reply with only NONE."
+}

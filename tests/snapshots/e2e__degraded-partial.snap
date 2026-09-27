@@ -1,0 +1,10 @@
+---
+source: tests/e2e.rs
+expression: "run(\"degraded-partial\", &[])"
+---
+$ stilltrue 
+stilltrue: history unavailable (partial clone) — nothing can be reported as rot.
+stilltrue: fix: check out without `--filter`, or pass --require-history to fail instead.
+stilltrue: no findings
+
+exit: 0

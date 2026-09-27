@@ -1,0 +1,12 @@
+---
+source: tests/e2e.rs
+expression: "run(\"command-rot\", &[])"
+---
+$ stilltrue 
+CLAUDE.md:1:6  rot  command `make demo` has no target in Makefile
+                    likely broke in <sha> "split demo into seed+serve" · <when>
+                    did you mean: make seed, make serve?
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

@@ -1,0 +1,8 @@
+---
+source: tests/e2e.rs
+expression: "run(\"path-lie\", &[])"
+---
+$ stilltrue 
+stilltrue: no findings
+
+exit: 0

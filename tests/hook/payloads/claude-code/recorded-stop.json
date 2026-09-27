@@ -1,0 +1,12 @@
+{
+  "session_id": "recorded-session",
+  "transcript_path": "/tmp/transcript.jsonl",
+  "cwd": "REPLACED",
+  "prompt_id": "recorded-prompt",
+  "permission_mode": "default",
+  "hook_event_name": "Stop",
+  "stop_hook_active": false,
+  "last_assistant_message": "`make demo`",
+  "background_tasks": [],
+  "session_crons": []
+}

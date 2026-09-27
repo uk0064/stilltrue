@@ -1,0 +1,29 @@
+# Frozen before any confirmatory run. The split and the acceptance thresholds live
+# here, in one file, so that changing either is a visible diff. Change them only
+# prospectively, with a recorded rationale and a new evaluation; if held-out results
+# motivated a change, disclose it and acquire a fresh holdout before claiming
+# confirmation.
+frozen_on = 2026-09-26
+
+# Hold-outs are whole repository families, never alternate spellings of a development
+# case. Every task's `split` must agree with its family's entry here.
+[families]
+pyapp = "development"
+tsapp = "development"
+polyglot = "development"
+docsite = "holdout"
+
+# Promotion gates, evaluated per host; one host passing never promotes another.
+[gates]
+min_improvement = 0.10            # D-vs-A point estimate, absolute success rate
+confidence = 0.95                 # interval level for every bound below
+max_unnecessary_block_upper = 0.05
+max_clean_control_overhead = 0.10 # p95 duration and mean tokens, D relative to A
+
+# Below these the analysis says "inconclusive" rather than estimating an effect.
+# They are the feasibility-pilot minimums: 12 tasks from four repositories,
+# three runs per task per arm per host.
+[conclusive]
+min_families = 4
+min_tasks = 12
+min_repeats = 3

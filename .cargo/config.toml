@@ -1,0 +1,7 @@
+# Tests run the binary over thousands of throwaway repositories, and each root gets its
+# own history cache. Kept here, under the build directory, they never reach the
+# developer's own cache directory — where an earlier suite left over a hundred thousand
+# of them for the platform indexer to crawl — and `cargo clean` removes them. The cache
+# also bounds itself (ADR-0007); this keeps tests out of it altogether.
+[env]
+STILLTRUE_CACHE_DIR = { value = "target/test-cache", relative = true }

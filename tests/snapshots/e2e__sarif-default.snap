@@ -1,0 +1,36 @@
+---
+source: tests/e2e.rs
+expression: "run(\"path-lie\", &[\"--format\", \"sarif\"])"
+---
+$ stilltrue --format sarif
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "automationDetails": {
+        "id": "stilltrue"
+      },
+      "columnKind": "unicodeCodePoints",
+      "originalUriBaseIds": {
+        "%SRCROOT%": {
+          "description": {
+            "text": "The repository root, as discovered by git."
+          }
+        }
+      },
+      "results": [],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/uk0064/stilltrue",
+          "name": "stilltrue",
+          "rules": [],
+          "semanticVersion": "0.1.0",
+          "version": "0.1.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}
+
+exit: 0

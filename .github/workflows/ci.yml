@@ -1,0 +1,88 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only unless a job asks for more; nothing here writes to the repository.
+permissions:
+  contents: read
+
+jobs:
+  release-smoke:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned release tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.32.0/cargo-dist-installer.sh | sh
+      - name: Verify native archive and Action installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          dist generate --check
+          target=$(rustc -vV | sed -n 's/^host: //p')
+          dist build --artifacts=local --target "$target"
+          python3 tests/action.py "target/distrib/stilltrue-${target}.tar.gz"
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+      # The corpus summary's arithmetic: rates beside denominators, failures never quiet.
+      - run: python3 -m unittest discover -s tests/corpus -p 'test_*.py'
+      # The agent-task benchmark harness, end to end with a scripted agent: no model.
+      - run: python3 -m unittest discover -s bench -p 'test_*.py'
+      # Catch a broken package here rather than at the moment of publishing, which is
+      # the one time nobody wants to discover it.
+      - run: cargo package --locked
+
+  # Every shipped feature, driven through the release binary the way a user would,
+  # against a repository with real git history. This is the one job that would notice
+  # a regression a unit test cannot see, so it runs on both platforms we ship for.
+  product:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo build --release
+      - run: tests/product/run.sh
+      # The optional pre-commit hooks, through pre-commit itself. Exit 3 means it could
+      # not run, which fails the job rather than passing it.
+      - run: pipx install pre-commit
+      - run: tests/product/precommit.sh
+
+  dogfood:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # stilltrue needs history to distinguish rot from a lie, and this repository
+          # is where that requirement is proven rather than asserted (ADR-0006).
+          fetch-depth: 0
+      - run: cargo build
+      # The self-referential rule from CLAUDE.md, as a test: this repository's own
+      # documents must pass its own lint, with no suppressions.
+      - run: ./target/debug/stilltrue --require-history
+
+  # The v1 budget is a warm run under one second on 500 documents across a 5,000-file
+  # tree, on the Apple-silicon laptop it was measured on. CI runners are slower and vary, so
+  # this holds a looser line: it exists to catch a regression of the kind that once made
+  # that tree take 8.5 seconds, not to certify the budget.
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo build --release
+      - run: python3 tests/perf/measure.py --runs 5 --budget-ms 3000

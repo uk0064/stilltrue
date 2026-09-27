@@ -1,0 +1,25 @@
+id = "tsapp-near-miss"
+family = "tsapp"
+repository = "bench/repos/tsapp/build.sh"
+split = "development"
+category = "near-miss"
+in_scope = true
+prompt = '''
+Make the `test` script collect coverage: change its command to
+`node --test --experimental-test-coverage dist/`.
+'''
+required_behavior = '''
+The `test` script's command changes; its name does not. package.json is a file the
+checker resolves commands against, but every script AGENTS.md names still exists, so the
+documents stay true and nothing should be flagged or blocked.
+'''
+code_checks = [
+  '''python3 -c 'import json; s = json.load(open("package.json"))["scripts"]; assert s["test"] == "node --test --experimental-test-coverage dist/"' ''',
+]
+known_limitations = [
+  "A near-miss for the command resolver: the manifest a claim resolves against changed, the claim did not break.",
+]
+
+[[documentation_obligations]]
+file = "AGENTS.md"
+must_contain = ["`npm run test`", "`npm run typecheck`"]

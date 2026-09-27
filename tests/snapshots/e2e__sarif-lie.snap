@@ -1,0 +1,80 @@
+---
+source: tests/e2e.rs
+expression: "run(\"path-lie\", &[\"--strict\", \"--format\", \"sarif\"])"
+---
+$ stilltrue --strict --format sarif
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "automationDetails": {
+        "id": "stilltrue"
+      },
+      "columnKind": "unicodeCodePoints",
+      "originalUriBaseIds": {
+        "%SRCROOT%": {
+          "description": {
+            "text": "The repository root, as discovered by git."
+          }
+        }
+      },
+      "results": [
+        {
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "CLAUDE.md",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 27,
+                  "endLine": 1,
+                  "startColumn": 6,
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "path `docs/never-existed.md` does not exist"
+          },
+          "partialFingerprints": {
+            "stilltrue/v1": "<sha>"
+          },
+          "ruleId": "stilltrue/path/lie"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/uk0064/stilltrue",
+          "name": "stilltrue",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "id": "stilltrue/path/lie",
+              "name": "PathLie",
+              "properties": {
+                "tags": [
+                  "documentation",
+                  "lie"
+                ]
+              },
+              "shortDescription": {
+                "text": "A path named in a document does not resolve, and there is no sign it ever did."
+              }
+            }
+          ],
+          "semanticVersion": "0.1.0",
+          "version": "0.1.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}
+
+exit: 0

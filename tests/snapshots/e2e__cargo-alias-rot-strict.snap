@@ -1,0 +1,12 @@
+---
+source: tests/e2e.rs
+expression: "run(\"cargo-alias-rot\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+CLAUDE.md:1:6  rot  command `cargo xtask` has no target in .cargo/config.toml
+                    likely broke in <sha> "rename the xtask alias to regen" · <when>
+                    did you mean: cargo regen?
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

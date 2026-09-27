@@ -1,0 +1,11 @@
+---
+source: tests/e2e.rs
+expression: "run(\"anchoring-monorepo\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+README.md:1:6  lie  command `pnpm run build` has no target in package.json
+                    did you mean: pnpm root-only?
+
+stilltrue: 0 rot, 1 lie
+
+exit: 0

@@ -1,0 +1,30 @@
+id = "docsite-near-miss"
+family = "docsite"
+repository = "bench/repos/docsite/build.sh"
+split = "holdout"
+category = "near-miss"
+in_scope = true
+prompt = '''
+Remove the deprecated `scripts/legacy_build.py`; nothing uses it any more.
+'''
+required_behavior = '''
+`scripts/legacy_build.py` is gone and `scripts/serve.py` is untouched. CHANGELOG.md
+records the deprecation; it is a historical record, correct as written, and must not be
+rewritten. Nothing should be flagged or blocked.
+'''
+code_checks = [
+  "test ! -e scripts/legacy_build.py",
+  "test -f scripts/serve.py",
+]
+known_limitations = [
+  "A near-miss for the path resolver: a document names the removed path, but changelogs are historical records and are not checked (ADR-0012).",
+  "Held out: tuning on the development families must not look at this family's results.",
+]
+
+[[documentation_obligations]]
+file = "CHANGELOG.md"
+must_contain = ["Deprecated `scripts/legacy_build.py`"]
+
+[[documentation_obligations]]
+file = "README.md"
+must_contain = ["`scripts/serve.py`"]

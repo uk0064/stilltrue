@@ -1,0 +1,24 @@
+id = "tsapp-rename-script"
+family = "tsapp"
+repository = "bench/repos/tsapp/build.sh"
+split = "development"
+category = "code-breaks-untouched-doc"
+in_scope = true
+prompt = '''
+Rename the npm script `typecheck` to `check:types`, keeping its command unchanged.
+'''
+required_behavior = '''
+package.json has a `check:types` script running `tsc --noEmit -p .` and no `typecheck`
+script. AGENTS.md tells agents to run `npm run typecheck` and must be updated.
+'''
+code_checks = [
+  '''python3 -c 'import json; s = json.load(open("package.json"))["scripts"]; assert s.get("check:types") == "tsc --noEmit -p ." and "typecheck" not in s' ''',
+]
+known_limitations = [
+  "The checks read package.json rather than running npm, so no Node toolchain is needed and nothing is fetched.",
+]
+
+[[documentation_obligations]]
+file = "AGENTS.md"
+must_contain = ["`npm run check:types`"]
+must_not_contain = ["npm run typecheck"]

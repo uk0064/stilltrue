@@ -1,0 +1,10 @@
+---
+source: tests/e2e.rs
+expression: "run(\"suppression-unused\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+CLAUDE.md:1:1  lie  suppression covers no claim
+
+stilltrue: 0 rot, 1 lie
+
+exit: 0

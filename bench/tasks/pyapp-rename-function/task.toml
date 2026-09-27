@@ -1,0 +1,27 @@
+id = "pyapp-rename-function"
+family = "pyapp"
+repository = "bench/repos/pyapp/build.sh"
+split = "development"
+category = "code-breaks-untouched-doc"
+in_scope = true
+prompt = '''
+Rename `load_config` to `read_config` throughout the package and its tests. Do not
+keep the old name as an alias.
+'''
+required_behavior = '''
+`pyapp.read_config` exists, `pyapp.load_config` does not, and the tests pass. CLAUDE.md
+names the function and must name `read_config()` afterwards.
+'''
+code_checks = [
+  "PYTHONPATH=src python3 -m unittest discover -s tests -q",
+  '''PYTHONPATH=src python3 -c 'import pyapp; assert hasattr(pyapp, "read_config") and not hasattr(pyapp, "load_config")' ''',
+  "! grep -rq load_config src tests",
+]
+known_limitations = [
+  "A Python-only repository, so stilltrue's symbol resolver reads it; the same rename in a mixed-language repository is out of reach (see polyglot-rename-function).",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`read_config()`"]
+must_not_contain = ["load_config"]

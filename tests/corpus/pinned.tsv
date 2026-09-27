@@ -1,0 +1,16 @@
+# name	url	commit — each repository at the exact commit the corpus numbers were measured at.
+requests	https://github.com/psf/requests.git	611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60
+flask	https://github.com/pallets/flask.git	d73fa1cdcbd8b1465c151db8924ba58b1dd14e35
+click	https://github.com/pallets/click.git	06b2a678741131fd577ce170e23e5ca0aeba0309
+httpx	https://github.com/encode/httpx.git	b5addb64f0161ff6bfe94c124ef76f6a1fba5254
+black	https://github.com/psf/black.git	56d208d35c17a0e6cee247430633eec762a8fe21
+poetry	https://github.com/python-poetry/poetry.git	94b6e35b9091991887aa54feeb3771a86d3bd692
+pytest	https://github.com/pytest-dev/pytest.git	8721173580390a9d297e5af06cac3f0b6841f425
+typer	https://github.com/fastapi/typer.git	a80f6e5ecd74f32b983cca336a2f3cba98d9853a
+pydantic	https://github.com/pydantic/pydantic.git	0384c970e37a59b344e75161eb106ea9996378ba
+llm	https://github.com/simonw/llm.git	764dc386c58b625f3ad9d203e699715ad208455f
+pip-tools	https://github.com/jazzband/pip-tools.git	b5f1116430699d58c3b376e801abcf981b136cf7
+ripgrep	https://github.com/BurntSushi/ripgrep.git	3fce3b5bb0236da2df6d99672afb8a719642eca7
+fd	https://github.com/sharkdp/fd.git	ce97e473ebaec49697c07daa50a7bc2b32f713d2
+fzf	https://github.com/junegunn/fzf.git	b1be3a8be1b833ce5b92fbbac11637643d60a046
+codex	https://github.com/openai/codex.git	51d66fdd3b75e1d34fdb82616e7e9c4089684b56

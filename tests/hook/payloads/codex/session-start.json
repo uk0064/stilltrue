@@ -1,0 +1,9 @@
+{
+  "session_id": "replay-codex",
+  "transcript_path": null,
+  "cwd": "REPLACED",
+  "hook_event_name": "SessionStart",
+  "model": "gpt-5",
+  "permission_mode": "default",
+  "source": "startup"
+}

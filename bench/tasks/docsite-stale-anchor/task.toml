@@ -1,0 +1,31 @@
+id = "docsite-stale-anchor"
+family = "docsite"
+repository = "bench/repos/docsite/stale-anchor/build.sh"
+split = "holdout"
+category = "stale-at-entry"
+in_scope = true
+prompt = '''
+Add an "Upgrading" section at the end of `docs/install.md` explaining that upgrading
+means replacing the copied docs directory with the new release's. While you are there,
+make sure links into the install guide still land on real sections.
+'''
+required_behavior = '''
+docs/install.md ends with an "Upgrading" section. README.md links to
+`docs/install.md#requirements`, a heading a commit renamed before the session began;
+the link must land on a real heading again, by updating the link or restoring the
+heading.
+'''
+code_checks = [
+  "grep -q '^## Upgrading' docs/install.md",
+]
+doc_checks = [
+  "python3 \"$BENCH_TASK_DIR/check_links.py\"",
+]
+known_limitations = [
+  "Either repair is accepted — update the anchor or restore the heading — so the anchor is graded by check_links.py rather than a fixed string.",
+  "Held out: tuning on the development families must not look at this family's results.",
+]
+
+[[documentation_obligations]]
+file = "README.md"
+must_contain = ["docs/install.md#"]

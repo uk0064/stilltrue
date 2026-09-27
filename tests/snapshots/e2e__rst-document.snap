@@ -1,0 +1,15 @@
+---
+source: tests/e2e.rs
+expression: "run(\"rst-document\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+docs/guide.rst:4:7  rot  command `make demo` has no target in Makefile
+                         likely broke in <sha> "drop the demo target" · <when>
+                         did you mean: make seed?
+docs/guide.rst:8:5  rot  command `make demo` has no target in Makefile
+                         likely broke in <sha> "drop the demo target" · <when>
+                         did you mean: make seed?
+
+stilltrue: 2 rot, 0 lie
+
+exit: 1

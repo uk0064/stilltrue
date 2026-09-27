@@ -1,0 +1,34 @@
+---
+source: tests/e2e.rs
+expression: "run(\"command-rot\", &[\"--format\", \"json\"])"
+---
+$ stilltrue --format json
+{
+  "findings": [
+    {
+      "claim": "make demo",
+      "column": 6,
+      "file": "CLAUDE.md",
+      "kind": "command",
+      "likelyBrokeIn": {
+        "relativeDate": "1 second ago",
+        "sha": "<sha>",
+        "subject": "split demo into seed+serve"
+      },
+      "line": 1,
+      "message": "command `make demo` has no target in Makefile",
+      "ruleId": "stilltrue/command/rot",
+      "span": {
+        "end": 14,
+        "start": 5
+      },
+      "suggestions": [
+        "make seed",
+        "make serve"
+      ],
+      "tier": "rot"
+    }
+  ]
+}
+
+exit: 1

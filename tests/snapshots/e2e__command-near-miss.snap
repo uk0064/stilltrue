@@ -1,0 +1,8 @@
+---
+source: tests/e2e.rs
+expression: "run(\"command-near-miss\", &[\"--strict\"])"
+---
+$ stilltrue --strict
+stilltrue: no findings
+
+exit: 0

@@ -1,0 +1,30 @@
+id = "pyapp-preexisting-rot"
+family = "pyapp"
+repository = "bench/repos/pyapp/backlog/build.sh"
+split = "development"
+category = "preexisting-rot"
+in_scope = true
+prompt = '''
+Give `load_config` an optional `default` argument: when the file does not exist, return
+`default` instead of raising. With no default it should still raise. Add tests for both.
+'''
+required_behavior = '''
+`load_config(path, default=...)` returns the default for a missing file and still raises
+FileNotFoundError without one. Nothing the documents say is affected by the change.
+README.md already documents a removed `make docs` target: pre-existing, unrelated rot.
+'''
+code_checks = [
+  "PYTHONPATH=src python3 -m unittest discover -s tests -q",
+  "PYTHONPATH=src python3 \"$BENCH_TASK_DIR/check.py\"",
+]
+known_limitations = [
+  "Repairing README.md's `make docs` is outside the task: it is neither required nor penalised, and a block about it would be an unnecessary block.",
+]
+
+[[documentation_obligations]]
+file = "CLAUDE.md"
+must_contain = ["`make test`", "`load_config()`"]
+
+[[documentation_obligations]]
+file = "README.md"
+must_contain = ["A small configuration library"]

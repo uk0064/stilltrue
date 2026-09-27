@@ -1,0 +1,27 @@
+id = "docsite-move-script"
+family = "docsite"
+repository = "bench/repos/docsite/build.sh"
+split = "holdout"
+category = "code-breaks-untouched-doc"
+in_scope = true
+prompt = '''
+Move `scripts/serve.py` to `tools/serve.py`. The scripts directory is being retired, so
+do not leave a copy behind.
+'''
+required_behavior = '''
+`tools/serve.py` exists and compiles; `scripts/serve.py` does not. README.md tells
+readers to run `scripts/serve.py` and must name the new path.
+'''
+code_checks = [
+  "test -f tools/serve.py",
+  "test ! -e scripts/serve.py",
+  "python3 -m py_compile tools/serve.py",
+]
+known_limitations = [
+  "Held out: tuning on the development families must not look at this family's results.",
+]
+
+[[documentation_obligations]]
+file = "README.md"
+must_contain = ["`tools/serve.py`"]
+must_not_contain = ["scripts/serve.py"]

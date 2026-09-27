@@ -1,0 +1,12 @@
+{
+  "session_id": "replay-claude",
+  "transcript_path": "/tmp/transcript.jsonl",
+  "cwd": "REPLACED",
+  "scratchpad_dir": "/tmp/claude-scratchpad",
+  "permission_mode": "default",
+  "effort": { "level": "medium" },
+  "hook_event_name": "SessionStart",
+  "source": "startup",
+  "model": "claude-opus-5",
+  "session_title": "replay"
+}

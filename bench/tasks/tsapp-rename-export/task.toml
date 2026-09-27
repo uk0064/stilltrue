@@ -1,0 +1,28 @@
+id = "tsapp-rename-export"
+family = "tsapp"
+repository = "bench/repos/tsapp/build.sh"
+split = "development"
+category = "code-breaks-untouched-doc"
+in_scope = true
+prompt = '''
+Rename `formatDate` to `formatIsoDate` in `src/format.ts` and everywhere it is
+exported. Do not keep the old name.
+'''
+required_behavior = '''
+`src/format.ts` exports `formatIsoDate`, `src/index.ts` re-exports it, and `formatDate`
+appears nowhere in src/. AGENTS.md names the function and must name `formatIsoDate()`.
+'''
+code_checks = [
+  "grep -q 'export function formatIsoDate' src/format.ts",
+  "grep -q 'formatIsoDate' src/index.ts",
+  "! grep -rqw formatDate src",
+]
+known_limitations = [
+  "The scripted agent for this case updates the document unprompted, so it measures whether hooks cost anything when the agent needs no help.",
+  "The checks grep the source rather than compiling it.",
+]
+
+[[documentation_obligations]]
+file = "AGENTS.md"
+must_contain = ["`formatIsoDate()`"]
+must_not_contain = ["formatDate()"]

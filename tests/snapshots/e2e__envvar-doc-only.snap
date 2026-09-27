@@ -1,0 +1,11 @@
+---
+source: tests/e2e.rs
+expression: "run(\"envvar-doc-only\", &[])"
+---
+$ stilltrue 
+CLAUDE.md:1:6  rot  env var `GEMINI_API_KEY` is not read anywhere in the repository
+                    likely broke in <sha> "rename the key" · <when>
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1

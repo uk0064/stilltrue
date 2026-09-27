@@ -1,0 +1,7 @@
+{
+  "session_id": "recorded-session",
+  "transcript_path": "/tmp/transcript.jsonl",
+  "cwd": "REPLACED",
+  "hook_event_name": "SessionStart",
+  "source": "startup"
+}

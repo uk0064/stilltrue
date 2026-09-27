@@ -1,0 +1,15 @@
+psf/requests
+pallets/flask
+pallets/click
+encode/httpx
+psf/black
+python-poetry/poetry
+pytest-dev/pytest
+fastapi/typer
+pydantic/pydantic
+simonw/llm
+jazzband/pip-tools
+BurntSushi/ripgrep
+sharkdp/fd
+junegunn/fzf
+openai/codex

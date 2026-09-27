@@ -1,0 +1,187 @@
+name: stilltrue
+description: Lint the claims your Markdown makes about your repository.
+branding:
+  icon: check-circle
+  color: purple
+
+inputs:
+  version:
+    description: >
+      The stilltrue release to install. Required and deliberately without a default:
+      a default pointing at a release that does not exist is a trap.
+    required: true
+  args:
+    description: >
+      Extra arguments passed to stilltrue. Word-split by the shell, so quoting is not
+      supported — pass paths without quotes.
+    required: false
+    default: ""
+  fail-on:
+    description: rot | any | none.
+    required: false
+    default: rot
+  strict:
+    description: Also report Tier B (lie).
+    required: false
+    default: "false"
+  unshallow:
+    description: >
+      Deepen a shallow clone before linting. Without history nothing can be reported as
+      rot, and actions/checkout is shallow by default, so this defaults to true.
+    required: false
+    default: "true"
+  sarif-file:
+    description: >
+      Also write SARIF to this path, for a later upload step. Off by default: SARIF
+      upload needs security-events: write, which many repositories will not grant
+      (ADR-0009).
+    required: false
+    default: ""
+
+outputs:
+  report-file:
+    description: >
+      Path to the versioned JSON run report of this scan: whether it was complete,
+      what it examined and what it could not, and the same findings as the annotations.
+    value: ${{ steps.run.outputs.report-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Deepen a shallow clone
+      if: inputs.unshallow == 'true'
+      shell: bash
+      run: |
+        # This action runs after checkout, so it cannot set fetch-depth. It repairs the
+        # clone instead (ADR-0009).
+        if [ "$(git rev-parse --is-shallow-repository 2>/dev/null || echo unknown)" = "true" ]; then
+          # A git failure never fails the build (CLAUDE.md). An unreachable remote, a
+          # checkout with persist-credentials: false, or a runner without egress all
+          # land here, and none of them are a reason to kill someone's job — stilltrue
+          # will say for itself that it cannot report rot.
+          if ! git fetch --unshallow --quiet; then
+            echo "stilltrue: could not deepen the clone; continuing without history" >&2
+          fi
+        fi
+
+    - name: Install stilltrue
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        GITHUB_ACTION_REPOSITORY: ${{ github.action_repository }}
+      run: |
+        set -euo pipefail
+        # `required: true` is not enforced by the runner; an omitted input arrives as
+        # the empty string and would build a URL ending in `/v/`.
+        if [ -z "${VERSION}" ]; then
+          echo "stilltrue: the 'version' input is required and names a published release." >&2
+          exit 2
+        fi
+        case "$(uname -s)-$(uname -m)" in
+          Linux-x86_64)  target=x86_64-unknown-linux-gnu ;;
+          Linux-aarch64) target=aarch64-unknown-linux-gnu ;;
+          Darwin-x86_64) target=x86_64-apple-darwin ;;
+          Darwin-arm64)  target=aarch64-apple-darwin ;;
+          *) echo "stilltrue: unsupported runner $(uname -s)-$(uname -m)" >&2; exit 2 ;;
+        esac
+        # GITHUB_ACTION_REPOSITORY is the repo this action was referenced from, so the
+        # download follows the fork rather than a hardcoded owner.
+        source="${GITHUB_ACTION_REPOSITORY:-uk0064/stilltrue}"
+        url="https://github.com/${source}/releases/download/v${VERSION}/stilltrue-${target}.tar.gz"
+        mkdir -p "$RUNNER_TEMP/stilltrue"
+        archive="$RUNNER_TEMP/stilltrue.tar.gz"
+        fetch() { curl --proto '=https' --tlsv1.2 --retry 3 --retry-all-errors -sSfL -o "$1" "$2"; }
+        if ! fetch "$archive" "$url"; then
+          echo "stilltrue: could not download $url" >&2
+          echo "stilltrue: check that release v${VERSION} exists and publishes ${target}." >&2
+          exit 2
+        fi
+
+        # This binary goes on PATH, so verify the checksum cargo-dist publishes beside
+        # the archive. A missing checksum file is itself a reason to stop: every real
+        # release has one.
+        if ! fetch "$archive.sha256" "$url.sha256"; then
+          echo "stilltrue: no checksum published for $url" >&2
+          exit 2
+        fi
+        if command -v sha256sum >/dev/null 2>&1; then
+          actual=$(sha256sum "$archive" | awk '{print $1}')
+        else
+          actual=$(shasum -a 256 "$archive" | awk '{print $1}')
+        fi
+        expected=$(awk '{print $1}' < "$archive.sha256")
+        if [ "$actual" != "$expected" ]; then
+          echo "stilltrue: checksum mismatch for $url" >&2
+          echo "stilltrue: expected $expected, got $actual" >&2
+          exit 2
+        fi
+
+        # cargo-dist archives wrap their contents in a target-named directory.
+        if ! tar xz --strip-components=1 -C "$RUNNER_TEMP/stilltrue" -f "$archive"; then
+          echo "stilltrue: could not unpack $archive" >&2
+          exit 2
+        fi
+        # tar exits 0 on an empty stream, so a clean pipeline is not evidence that a
+        # binary arrived. Without this check the step goes green, puts an empty
+        # directory on PATH, and the next step fails with `command not found`.
+        if [ ! -x "$RUNNER_TEMP/stilltrue/stilltrue" ]; then
+          echo "stilltrue: $url produced no binary" >&2
+          exit 2
+        fi
+        echo "$RUNNER_TEMP/stilltrue" >> "$GITHUB_PATH"
+
+    - name: Run stilltrue
+      id: run
+      shell: bash
+      env:
+        FAIL_ON: ${{ inputs.fail-on }}
+        STRICT: ${{ inputs.strict }}
+        ARGS: ${{ inputs.args }}
+        SARIF_FILE: ${{ inputs.sarif-file }}
+      run: |
+        set -euo pipefail
+
+        # `${arr[@]}` on an empty array is an unbound-variable error under `set -u` in
+        # bash before 4.4, which is what macOS runners ship as /bin/bash. Build the flag
+        # as a plain string instead of an array.
+        strict_flag=""
+        [ "$STRICT" = "true" ] && strict_flag="--strict"
+
+        # One scan for every output (ADR-0021): annotations on stdout, SARIF to its file
+        # when asked for, the run report beside it, and the summary on stderr. The
+        # binary emits the annotations itself under `--format github`, so the Action
+        # needs no runtime (CLAUDE.md), and it sets the exit code from --fail-on, so
+        # clap rejects a bad value. $ARGS is deliberately unquoted: it is a command-line
+        # fragment. The SARIF path is quoted, so it may contain spaces.
+        report="$RUNNER_TEMP/stilltrue-report.json"
+        log="$RUNNER_TEMP/stilltrue-stderr.log"
+        status=0
+        if [ -n "$SARIF_FILE" ]; then
+          stilltrue --format github --fail-on "$FAIL_ON" $strict_flag --summary \
+            --report-file "$report" --sarif-file "$SARIF_FILE" $ARGS 2>"$log" || status=$?
+        else
+          stilltrue --format github --fail-on "$FAIL_ON" $strict_flag --summary \
+            --report-file "$report" $ARGS 2>"$log" || status=$?
+        fi
+
+        # stderr was held back only so it can also reach the job summary; the step log
+        # still gets all of it, warnings and summary alike.
+        cat "$log" >&2
+        if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+          {
+            echo "### stilltrue"
+            echo
+            echo '```'
+            cat "$log"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+        fi
+        if [ -f "$report" ]; then
+          echo "report-file=$report" >> "${GITHUB_OUTPUT:-/dev/null}"
+        fi
+
+        # 0 is clean, 1 is findings; anything else is stilltrue failing to run.
+        if [ "$status" -gt 1 ]; then
+          echo "stilltrue: exited $status; see the log above." >&2
+        fi
+        exit "$status"

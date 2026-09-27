@@ -1,0 +1,12 @@
+---
+source: tests/e2e.rs
+expression: "run(\"configured-include-replaces\", &[])"
+---
+$ stilltrue 
+docs/guide.md:1:6  rot  command `make demo` has no target in Makefile
+                        likely broke in <sha> "drop the demo target" · <when>
+                        did you mean: make seed?
+
+stilltrue: 1 rot, 0 lie
+
+exit: 1
