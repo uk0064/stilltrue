@@ -17,7 +17,7 @@ exclude = ["tests/fixtures/**", "tests/snapshots/**", ".github/**", "bench/**"]
 
 [dependencies]
 clap = { version = "4.6.6", features = ["derive"] }
-dirs = "6.0.0"
+dirs = "7.0.0"
 globset = "0.4.20"
 ignore = "0.4.33"
 rayon = "1.12.0"
