@@ -63,8 +63,8 @@ here shows that the adapters improve an agent's work: `bench/` is the harness th
 and no live run has been made. Say what a number does not show, and keep this file and
 the README honest when one changes.
 
-`docs/design.md` is the source of truth — the architecture, and every decision behind it
-as a numbered ADR — and `CONTEXT.md` is the vocabulary. Read both before proposing
+`docs/design.md` is the source of truth — the architecture, and every decision behind
+it — and `CONTEXT.md` is the vocabulary. Read both before proposing
 anything. If you want to change a decision, change the design document first and say
 so — don't diverge silently in code.
 
@@ -94,8 +94,8 @@ the whole tool.
 - **Three gating tiers.** Tier A (rot: provably broken *and* git history proves it once
   resolved) is on by default. Tier B (lie: never existed) needs `--strict`. Tier C
   (ambiguous) is never reported and no flag reaches it — but classification rules do,
-  and adding one is a design change with a new ADR in `docs/design.md`, the way ADR-0011
-  added one.
+  and adding one is a design change, written into `docs/design.md` with its reasoning
+  before the code, the way ADR-0011 added one.
 - **Git as a subprocess** behind a trait, not `gix`. Git is in every CI image.
 
 ## Non-goals — say no to these
