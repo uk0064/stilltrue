@@ -71,9 +71,15 @@ Run it gently, and clean up after it.
 - Every user-visible change gets an entry under Unreleased in `CHANGELOG.md`, in the
   Keep a Changelog format.
 
-## Commits
+## Pull requests and commits
 
-- The subject is one plain imperative sentence saying what the change does, without a
-  type prefix or a trailing period: "Bound the history cache, and keep tests out of the
-  real one".
+- Every change reaches `main` through a pull request; `main` accepts nothing else. Every
+  CI job must pass, history stays linear, and pull requests are squash-merged.
+- The maintainer approves every pull request before it merges, Dependabot's included.
+- Coding agents open pull requests and stop there. Approving and merging belong to the
+  maintainer, even when the agent is working with credentials that would allow it.
+- A commit subject is one plain imperative sentence saying what the change does, without
+  a type prefix or a trailing period: "Bound the history cache, and keep tests out of
+  the real one". A pull request title follows the same rule, because a squash merge can
+  use it as the subject.
 - The body, when there is one, says why.
